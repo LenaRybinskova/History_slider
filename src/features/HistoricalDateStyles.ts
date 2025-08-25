@@ -3,23 +3,19 @@ import {colors} from '../app/stylesVar';
 
 
 export const Container = styled.div`
-    width: 100%;
-    max-width: 1442px;
-    height: 100%;
-    margin-right: auto;
-    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin-inline: 320px 160px;
     border: 1px solid ${colors.text};
-    /*
-    padding: 0 50px;
-    */
-
-    @media screen and (max-width: 320px) {
-        padding: 0 30px;
-    }
+    padding-block: 176px 105px;
+    padding-left:80px ;
+    position: relative;
+    background-color: rosybrown;
 `;
 
 export const Title = styled.h1`
-    display: block;
+
     font-weight: 700;
     font-size: 56px;
     line-height: 120%;

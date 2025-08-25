@@ -30,21 +30,25 @@ const GlobalStyle = createGlobalStyle`
         --second-family: "Bebas Neue", sans-serif;
     }
 
+    
+
+    body {
+ /*       max-width: 1920px;
+        height: 1080px;*/
+/*        margin: 0 auto;*/
+        /*      width: 100%;*/
+        background-color:olivedrab;
+        //margin-inline:160px 320px;
+/*        margin: 177px 160px 105px  320px;*/
+        border-inline: 1px solid ${colors.text};
+    }
+
     * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
         font-family: ${fonts.primary};
         color: ${colors.text};
-    }
-
-    body {
-        max-width: 1920px;
-        height: 100%;
-        margin: 0 auto;
-        /*      width: 100%;*/
-        background-color: ${colors.background};
-        padding-inline:160px 320px;
     }
 `;
 

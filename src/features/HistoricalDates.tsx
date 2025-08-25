@@ -1,11 +1,14 @@
 import {Container, Title} from './HistoricalDateStyles';
+import {TimePeriod} from './TimePeriod/TimePeriod';
 
-Title.displayName = 'HistoricalDatesTitle'
 
 export const HistoricalDates = () => {
     return (
-        <Container>
+        <>
             <Title>Исторические даты</Title>
-        </Container>
+            <TimePeriod/>
+            <div>Слайдер</div>
+        </>
+
     )
 }

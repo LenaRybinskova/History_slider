@@ -11,7 +11,7 @@ module.exports = {
                 use: {
                     loader: 'ts-loader',
                     options: {
-                        transpileOnly: true,
+                        transpileOnly: true, // Важная опция для избежания ошибок
                     }
                 },
                 exclude: /node_modules/,

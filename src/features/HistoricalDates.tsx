@@ -1,5 +1,6 @@
-import {Container, Title} from './HistoricalDateStyles';
+import { Title} from './HistoricalDateStyles';
 import {TimePeriod} from './TimePeriod/TimePeriod';
+import {AnimatedCircle} from './Circle/Circle';
 
 
 export const HistoricalDates = () => {
@@ -7,7 +8,7 @@ export const HistoricalDates = () => {
         <>
             <Title>Исторические даты</Title>
             <TimePeriod/>
-            <div>Слайдер</div>
+            <AnimatedCircle pointsCount={6} onPointClick={()=>{}}/>
         </>
 
     )

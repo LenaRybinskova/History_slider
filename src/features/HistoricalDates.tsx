@@ -1,5 +1,9 @@
-export const HistoricalDates =()=>{
-    return(
-        <div>HistoricalDates</div>
+import {Container, Title} from './HistoricalDateStyles';
+
+export const HistoricalDates = () => {
+    return (
+        <Container>
+            <Title>Исторические даты</Title>
+        </Container>
     )
 }

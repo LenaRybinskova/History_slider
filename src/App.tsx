@@ -3,6 +3,7 @@ import {HistoricalDates} from './features/HistoricalDates';
 import GlobalStyle from './app/globalStyles';
 import styled from 'styled-components';
 import {colors} from './app/stylesVar';
+import {TimelineSlider} from './features/Slider/Slider';
 
 
 export const Container = styled.div`
@@ -24,6 +25,7 @@ const App= () => {
         <Container>
             <GlobalStyle/>
             <HistoricalDates/>
+            <TimelineSlider/>
         </Container>
     )
 };

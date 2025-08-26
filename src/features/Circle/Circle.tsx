@@ -10,77 +10,80 @@ interface AnimatedCircleProps {
 }
 
 const CircleContainer = styled.div`
-  position: absolute;
-  width: 536px;
-  height: 536px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    width: 536px;
+    height: 536px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `
 
 const CircleRing = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 1px solid ${colors.primary};
-  border-radius: 50%;
-  background: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px solid ${colors.primary};
+    border-radius: 50%;
+    background: transparent;
 `
 
 const PointsContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 `
 
 const Point = styled.div<{ $isActive: boolean; $isHovered: boolean }>`
-  position: absolute;
-  width: ${(props) => (props.$isActive || props.$isHovered ? "56px" : "6px")};
-  height: ${(props) => (props.$isActive || props.$isHovered ? "56px" : "6px")};
-  background-color: ${(props) => (props.$isActive ? "#5d5fef" : "#42567a")};
-  border: 2px solid white;
-  border-radius: 50%;
-  cursor: pointer;
-  transform: translate(-50%, -50%);
-  transition: all 0.3s ease;
-  z-index: 10;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
+    position: absolute;
+    width: ${(props) => (props.$isActive || props.$isHovered ? "56px" : "6px")};
+    height: ${(props) => (props.$isActive || props.$isHovered ? "56px" : "6px")};
+    background-color: ${(props) => (props.$isActive ? colors.background : "#42567a")};
+    border: ${(props) => (props.$isActive ? colors.text : "")};
+    border-radius: 50%;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
 
-  &:hover {
-    background-color: #ef5da8;
-  }
+    &:hover {
+        background-color: ${colors.background};
+    }
 `
 
-const PointNumber = styled.span<{ $visible: boolean }>`
-  opacity: ${(props) => (props.$visible ? 1 : 0)};
-  transition: opacity 0.3s ease;
-  user-select: none;
+const PointNumber = styled.span<{ $visible: boolean; $rotation: number }>`
+    opacity: ${(props) => (props.$visible ? 1 : 0)};
+    transition: opacity 0.3s ease;
+    user-select: none;
+    transform: rotate(${(props) => props.$rotation}deg);
+    position: absolute;
 `
 
 export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({ pointsCount = 4, onPointClick }) => {
     const containerRef = useRef<HTMLDivElement>(null)
     const pointsContainerRef = useRef<HTMLDivElement>(null)
     const pointsRef = useRef<HTMLDivElement[]>([])
-    const [activePointIndex, setActivePointIndex] = useState(0)
+    const numbersRef = useRef<HTMLSpanElement[]>([])
+    const [activePointIndex, setActivePointIndex] = useState(0) // Начинаем с первого point
     const [hoveredPointIndex, setHoveredPointIndex] = useState<number | null>(null)
+    const [containerRotation, setContainerRotation] = useState(0)
 
     const validPointsCount = Math.max(2, Math.min(6, pointsCount))
 
     const getPointPosition = (index: number, total: number) => {
         const radius = 268
-        const startAngle = -60
         const angleStep = 360 / total
-        const angle = startAngle + index * angleStep
+        const angle = index * angleStep - 90
         const radian = (angle * Math.PI) / 180
 
         const x = radius + radius * Math.cos(radian)
@@ -89,19 +92,52 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({ pointsCount = 4,
         return { x, y, angle }
     }
 
+    const getShortestRotation = (currentIndex: number, targetIndex: number, total: number) => {
+        const angleStep = 360 / total
+        const currentAngle = currentIndex * angleStep
+        const targetAngle = targetIndex * angleStep
+
+        let angleDiff = targetAngle - currentAngle
+
+        if (angleDiff > 180) {
+            angleDiff -= 360
+        } else if (angleDiff < -180) {
+            angleDiff += 360
+        }
+
+        return angleDiff
+    }
+
     const animateToActivePosition = (clickedIndex: number) => {
         if (clickedIndex === activePointIndex || !pointsContainerRef.current) return
 
-        const angleStep = 360 / validPointsCount
-        const rotationAngle = -clickedIndex * angleStep
+        const currentRotation = gsap.getProperty(pointsContainerRef.current, "rotation") as number
+        const shortestRotation = getShortestRotation(activePointIndex, clickedIndex, validPointsCount)
+        const targetRotation = currentRotation - shortestRotation
 
         gsap.to(pointsContainerRef.current, {
-            rotation: rotationAngle,
+            rotation: targetRotation,
             duration: 1.2,
             ease: "power2.inOut",
+            onUpdate: () => {
+
+                const currentRot = gsap.getProperty(pointsContainerRef.current, "rotation") as number
+                numbersRef.current.forEach((numberEl) => {
+                    if (numberEl) {
+                        gsap.set(numberEl, {
+                            rotation: -currentRot,
+                            immediateRender: true,
+                        })
+                    }
+                })
+            },
+            onComplete: () => {
+                setContainerRotation(targetRotation)
+            },
         })
 
         setActivePointIndex(clickedIndex)
+        onPointClick?.(clickedIndex)
     }
 
     useEffect(() => {
@@ -118,15 +154,28 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({ pointsCount = 4,
             })
         })
 
+        const initialRotation = 30
         if (pointsContainerRef.current) {
-            gsap.set(pointsContainerRef.current, { rotation: 0 })
-            setActivePointIndex(0)
+            gsap.set(pointsContainerRef.current, {
+                rotation: initialRotation,
+                immediateRender: true,
+            })
+            setContainerRotation(initialRotation)
+
+            // Устанавливаем вращение для цифр
+            numbersRef.current.forEach((numberEl) => {
+                if (numberEl) {
+                    gsap.set(numberEl, {
+                        rotation: -initialRotation,
+                        immediateRender: true,
+                    })
+                }
+            })
         }
     }, [validPointsCount])
 
     const handlePointClick = (index: number) => {
         animateToActivePosition(index)
-        onPointClick?.(index)
     }
 
     const handlePointMouseEnter = (index: number) => {
@@ -153,10 +202,22 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({ pointsCount = 4,
                         onMouseEnter={() => handlePointMouseEnter(index)}
                         onMouseLeave={handlePointMouseLeave}
                     >
-                        <PointNumber $visible={index === activePointIndex || hoveredPointIndex === index}>{index + 1}</PointNumber>
+                        <PointNumber
+                            ref={(el) => {
+                                if (el) numbersRef.current[index] = el
+                            }}
+                            $visible={index === activePointIndex || hoveredPointIndex === index}
+                            $rotation={-containerRotation}
+                        >
+                            {index + 1}
+                        </PointNumber>
                     </Point>
                 ))}
             </PointsContainer>
         </CircleContainer>
     )
 }
+
+
+
+

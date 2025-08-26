@@ -1,6 +1,8 @@
 import {TimePeriod} from './TimePeriod/TimePeriod';
 import {AnimatedCircle} from './Circle/Circle';
 import styled from 'styled-components';
+import {useAppSelector} from '../app/store/store';
+import {useState} from 'react';
 
 export const Title = styled.h1`
     font-weight: 700;
@@ -23,11 +25,18 @@ export const Title = styled.h1`
 `;
 
 export const HistoricalDates = () => {
+    const categories = useAppSelector(state => state.categories.categories);
+
+    const handlePointClick = (index: number, categoryId: string) => {
+        console.log('Кликнули на точку:', index, 'ID категории:', categoryId);
+
+    };
+
     return (
         <>
             <Title>Исторические даты</Title>
             <TimePeriod/>
-            <AnimatedCircle pointsCount={6} onPointClick={()=>{}}/>
+            <AnimatedCircle categories={categories} onPointClick={handlePointClick}/>
         </>
 
     )

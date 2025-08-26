@@ -25,13 +25,12 @@ export const Container = styled.div`
 
 const App= () => {
     const dispatch = useAppDispatch()
-    const categories = useAppSelector(state => state.categories.categories);
 
     useEffect(() => {
         dispatch(fetchCategoriesTC())
     }, []);
 
-    console.log("categories", categories)
+
     return (
         <Container>
             <GlobalStyle/>

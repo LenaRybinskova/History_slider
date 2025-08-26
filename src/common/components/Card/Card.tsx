@@ -8,7 +8,6 @@ const CardContainer = styled.div`
 `
 
 const Title = styled.h3`
-    font-weight: 400;
     font-size: 25px;
     line-height: 120%;
     text-transform: uppercase;
@@ -16,7 +15,7 @@ const Title = styled.h3`
 `
 
 const Description = styled.p`
-    font-weight: 400;
+    font-weight: 500;
     font-size: 20px;
     line-height: 150%;`
 

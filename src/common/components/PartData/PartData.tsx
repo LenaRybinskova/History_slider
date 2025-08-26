@@ -9,10 +9,10 @@ const Data=styled.span`
 `
 
 //TODO типизацию изменить
-export const PartData=(data:any)=>{
+export const PartData=({ data }: { data: string })=>{
     return (
         <Data>
-            {data.toString()}
+            {data}
         </Data>
     )
 }

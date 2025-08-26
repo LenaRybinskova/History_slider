@@ -1,7 +1,7 @@
 import type React from "react"
 
 import styled from "styled-components"
-import { colors } from "../../../app/stylesVar"
+import { colors } from "../../../app/styles/stylesVar"
 
 type CircleButtonProps= {
     onClick?: () => void

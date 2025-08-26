@@ -14,9 +14,12 @@
   "license": "ISC",
   "packageManager": "pnpm@10.6.1",
   "dependencies": {
+    "@reduxjs/toolkit": "^2.8.2",
     "gsap": "^3.13.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
+    "react-redux": "^9.2.0",
+    "redux": "^5.0.1",
     "styled-components": "^6.1.19",
     "swiper": "^11.2.10"
   },

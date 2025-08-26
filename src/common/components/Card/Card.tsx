@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {colors} from '../../../app/stylesVar';
+import {colors} from '../../../app/styles/stylesVar';
 
 const CardContainer = styled.div`
     display: flex;

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {colors} from '../../app/stylesVar';
+import {colors} from '../../app/styles/stylesVar';
 
 export const TimePeriodContainer = styled.div`
     display: flex;

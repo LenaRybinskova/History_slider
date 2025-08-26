@@ -6,7 +6,6 @@ export const CategoryMockData = [
     {id: '555555', description: 'Наука'},
     {id: '6666666', description: 'Наука'}]
 
-
 export const EventsMockData = {
     categories: {
         '1111111': [{
@@ -121,4 +120,8 @@ export const EventsMockData = {
     }
 }
 
+export type CategoryType={
+    id: string,
+    description: string,
+}
 

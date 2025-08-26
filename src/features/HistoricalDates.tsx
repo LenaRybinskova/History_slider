@@ -28,7 +28,6 @@ export const HistoricalDates = () => {
             <Title>Исторические даты</Title>
             <TimePeriod/>
             <AnimatedCircle pointsCount={6} onPointClick={()=>{}}/>
-
         </>
 
     )

@@ -45,16 +45,14 @@ export const Title = styled.h1`
 
 
 const App = () => {
-    const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>(3);
+    const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>(1);
     const [activeCategoryId, setActiveCategoryId] = useState<string>("");
     const dispatch = useAppDispatch()
     const categories = useAppSelector(state => state.categories.categories);
 
-
     const handlePointClick = (index: number, categoryId: string) => {
         console.log('Кликнули на точку:', index + 1, 'ID категории:', categoryId);
-        const activeIndex = index
-        setActiveCategoryIndex(activeIndex)
+        setActiveCategoryIndex(index)
         setActiveCategoryId(categoryId)
     };
 
@@ -64,21 +62,28 @@ const App = () => {
 
     useEffect(() => {
         if (categories.length > 0 && !activeCategoryId) {
-            // Устанавливаем индекс 4, но проверяем чтобы не выйти за границы массива
-            const initialIndex = Math.min(4, categories.length - 1);
-            setActiveCategoryIndex(initialIndex);
-            setActiveCategoryId(categories[initialIndex].id);
+            const threeOClockIndex = Math.min(1, categories.length - 1);
+            setActiveCategoryIndex(threeOClockIndex);
+            setActiveCategoryId(categories[threeOClockIndex].id);
         }
     }, [categories, activeCategoryId]);
-
 
     return (
         <Container>
             <GlobalStyle/>
             <Title>Исторические даты</Title>
             <TimePeriod/>
-            <AnimatedCircle categories={categories} onPointClick={handlePointClick}/>
-            <TimelineSlider activeCategoryIndex={activeCategoryIndex} onPointClick={handlePointClick} categories={categories} activeCategoryId={activeCategoryId}/>
+            <AnimatedCircle
+                categories={categories}
+                onPointClick={handlePointClick}
+                activePointIndex={activeCategoryIndex}
+            />
+            <TimelineSlider
+                activeCategoryIndex={activeCategoryIndex}
+                onPointClick={handlePointClick}
+                categories={categories}
+                activeCategoryId={activeCategoryId}
+            />
         </Container>
     )
 };

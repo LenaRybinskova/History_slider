@@ -117,16 +117,16 @@ type Props = {
 }
 
 export function TimelineSlider(props: Props) {
+    console.log("РЕРЕНДЕР TimelineSlider")
     const { activeCategoryIndex, activeCategoryId, onPointClick, categories } = props;
 
     const onClickButtonSlider = (direction: number) => {
-        // Вычисляем новый индекс с учетом границ
         const newIndex = activeCategoryIndex + direction;
 
-        // Проверяем границы (0 до categories.length - 1)
         if (newIndex >= 0 && newIndex < categories.length) {
-            // Вызываем callback из родителя с новым индексом и соответствующим ID
-            onPointClick(newIndex, categories[newIndex].id);
+            if (onPointClick) {
+                onPointClick(newIndex, categories[newIndex].id);
+            }
         }
     }
 
@@ -142,19 +142,10 @@ export function TimelineSlider(props: Props) {
                 </Parts>
                 {showSliderButtons && (
                     <ButtonsContainer>
-                        {/* Кнопка "назад" - уменьшаем индекс на 1 */}
                         <ButtonSlider
-                            onClick={() => onClickButtonSlider(-1)}
-                            disabled={activeCategoryIndex === 0}
-                        >
-                            <ArrowBackSVG/>
+                            onClick={() => onClickButtonSlider(-1)}><ArrowBackSVG/>
                         </ButtonSlider>
-
-                        {/* Кнопка "вперед" - увеличиваем индекс на 1 */}
-                        <ButtonSlider
-                            onClick={() => onClickButtonSlider(1)}
-                            disabled={activeCategoryIndex === categories.length - 1}
-                        >
+                        <ButtonSlider onClick={() => onClickButtonSlider(1)}>
                             <ArrowForwardSVG/>
                         </ButtonSlider>
                     </ButtonsContainer>

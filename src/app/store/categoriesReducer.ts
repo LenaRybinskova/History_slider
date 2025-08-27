@@ -1,4 +1,4 @@
-import {CategoryMockData, CategoryType} from '../../mockData/mockData';
+import {CategoryMockData, CategoryType, EventsMockData} from '../../mockData/mockData';
 import {Dispatch} from 'react';
 
 const FETCH_CATEGORIES = 'FETCH_CATEGORIES_SUCCESS'
@@ -51,10 +51,21 @@ export type FetchCategories = ReturnType<typeof fetchCategoriesAC>
 type CategoriesActions = | FetchCategories
 
 
-export const fetchCategoriesTC = () => async (dispatch: Dispatch<CategoriesActions>) => {
+export const fetchAllCategoriesTC = () => async (dispatch: Dispatch<CategoriesActions>) => {
     try {
         const categories = CategoryMockData;
         dispatch(fetchCategoriesAC(categories));
+    } catch (error) {
+    }
+};
+
+export const fetchCategoryTC = (idCategory:string) => async (dispatch: Dispatch<CategoriesActions>) => {
+    try {
+        if (idCategory in EventsMockData.categories) {
+
+            const events = EventsMockData.categories[idCategory as keyof typeof EventsMockData.categories];
+            dispatch(fetchCategoriesAC(events));
+        }
     } catch (error) {
     }
 };

@@ -8,11 +8,13 @@ const Data=styled.span`
     font-weight: 400;
 `
 
-//TODO типизацию изменить
 export const PartData=({ data }: { data: string })=>{
+    const number = parseInt(data, 10);
+    const formattedData = !isNaN(number) && number < 10 ? number.toString().padStart(2, '0') : data;
+
     return (
         <Data>
-            {data}
+            {formattedData}
         </Data>
     )
 }

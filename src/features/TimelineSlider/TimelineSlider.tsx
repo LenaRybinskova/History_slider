@@ -70,16 +70,17 @@ export function TimelineSlider() {
 */
 
 
-
-import styled from "styled-components"
-import "swiper/css"
-import "swiper/css/navigation"
-import "swiper/css/pagination"
-import ArrowBackSVG from "../../../public/icons/ArrowBack"
-import ArrowForwardSVG from "../../../public/icons/ArrowForward"
-import { ButtonSlider } from "../../common/components/ButtonSlider/ButtonSlider"
-import { PartData } from "../../common/components/PartData/PartData"
-import { Card } from "../../common/components/Card/Card"
+import styled from 'styled-components'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import ArrowBackSVG from '../../../public/icons/ArrowBack'
+import ArrowForwardSVG from '../../../public/icons/ArrowForward'
+import {ButtonSlider} from '../../common/components/ButtonSlider/ButtonSlider'
+import {PartData} from '../../common/components/PartData/PartData'
+import {Card} from '../../common/components/Card/Card'
+import {CategoryType} from '../../mockData/mockData';
+import {useState} from 'react';
 
 const ContainerSlider = styled.div`
     display: flex;
@@ -108,44 +109,66 @@ const TimelineContainer = styled.div`
     flex-direction: row;
     gap: 100px;
 `
+type Props = {
+    activeCategoryIndex: number
+    onPointClick?: (index: number, categoryId: string) => void;
+    categories: CategoryType[]
+    activeCategoryId: string
+}
 
-export function TimelineSlider() {
-    const data = [1, 2, 3]
-    const showSliderButtons = data.length > 1
+export function TimelineSlider(props: Props) {
+    const { activeCategoryIndex, activeCategoryId, onPointClick, categories } = props;
+
+    const onClickButtonSlider = (direction: number) => {
+        // Вычисляем новый индекс с учетом границ
+        const newIndex = activeCategoryIndex + direction;
+
+        // Проверяем границы (0 до categories.length - 1)
+        if (newIndex >= 0 && newIndex < categories.length) {
+            // Вызываем callback из родителя с новым индексом и соответствующим ID
+            onPointClick(newIndex, categories[newIndex].id);
+        }
+    }
+
+    const data = [1, 2, 3];
+    const showSliderButtons = categories.length > 1;
 
     return (
         <ContainerSlider>
             <Counter>
                 <Parts>
-                    <PartData data={"01"} />
-                    /<PartData data={"06"} />
+                    <PartData data={(activeCategoryIndex + 1).toString()}/>
+                    /<PartData data={categories.length.toString()}/>
                 </Parts>
                 {showSliderButtons && (
                     <ButtonsContainer>
-                        <ButtonSlider>
-                            <ArrowBackSVG />
+                        {/* Кнопка "назад" - уменьшаем индекс на 1 */}
+                        <ButtonSlider
+                            onClick={() => onClickButtonSlider(-1)}
+                            disabled={activeCategoryIndex === 0}
+                        >
+                            <ArrowBackSVG/>
                         </ButtonSlider>
-                        <ButtonSlider>
-                            <ArrowForwardSVG />
+
+                        {/* Кнопка "вперед" - увеличиваем индекс на 1 */}
+                        <ButtonSlider
+                            onClick={() => onClickButtonSlider(1)}
+                            disabled={activeCategoryIndex === categories.length - 1}
+                        >
+                            <ArrowForwardSVG/>
                         </ButtonSlider>
                     </ButtonsContainer>
                 )}
             </Counter>
 
             <TimelineContainer>
-                {showSliderButtons && (
-                    <ButtonSlider>
-                        <ArrowBackSVG />
-                    </ButtonSlider>
-                )}
                 {data.map((d, index) => (
-                    <Card key={index} title={"1997"} description={"kfndnvndfnlknlsklfvnf   skmdkfmpsdmp lsdmpfppdsk"} />
+                    <Card
+                        key={index}
+                        title={'1997'}
+                        description={'kfndnvndfnlknlsklfvnf skmdkfmpsdmp lsdmpfppdsk'}
+                    />
                 ))}
-                {showSliderButtons && (
-                    <ButtonSlider>
-                        <ArrowForwardSVG />
-                    </ButtonSlider>
-                )}
             </TimelineContainer>
         </ContainerSlider>
     )

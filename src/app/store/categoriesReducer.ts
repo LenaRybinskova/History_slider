@@ -35,16 +35,14 @@ export const categoriesReducer = (state: InitialStateType = initialState, action
                 }
             };
         }
-        case FETCH_CATEGORY_BY_ID: {
-
+        case FETCH_CATEGORY_BY_ID:
             return {
                 ...state,
                 eventsByIdCategories: {
                     ...state.eventsByIdCategories,
-                    [action.payload.idCategory]: action.payload.events
+                    [action.payload.idCategory]: action.payload.events || []
                 }
             };
-        }
         default:
             return state;
     }

@@ -81,6 +81,7 @@ import {PartData} from '../../common/components/PartData/PartData'
 import {Card} from '../../common/components/Card/Card'
 import {CategoryType} from '../../mockData/mockData';
 import {useState} from 'react';
+import {EventAPIType} from "../../app/store/categoriesReducer";
 
 const ContainerSlider = styled.div`
     display: flex;
@@ -114,11 +115,12 @@ type Props = {
     onPointClick?: (index: number, categoryId: string) => void;
     categories: CategoryType[]
     activeCategoryId: string
+    events:EventAPIType[]
 }
 
 export function TimelineSlider(props: Props) {
     console.log("РЕРЕНДЕР TimelineSlider")
-    const { activeCategoryIndex, activeCategoryId, onPointClick, categories } = props;
+    const { activeCategoryIndex, activeCategoryId, onPointClick, categories, events } = props;
 
     const onClickButtonSlider = (direction: number) => {
         const newIndex = activeCategoryIndex + direction;
@@ -130,7 +132,6 @@ export function TimelineSlider(props: Props) {
         }
     }
 
-    const data = [1, 2, 3];
     const showSliderButtons = categories.length > 1;
 
     return (
@@ -153,11 +154,11 @@ export function TimelineSlider(props: Props) {
             </Counter>
 
             <TimelineContainer>
-                {data.map((d, index) => (
+                {events.map((event) => (
                     <Card
-                        key={index}
-                        title={'1997'}
-                        description={'kfndnvndfnlknlsklfvnf skmdkfmpsdmp lsdmpfppdsk'}
+                        key={event.id}
+                        title={event.year}
+                        description={event.description}
                     />
                 ))}
             </TimelineContainer>

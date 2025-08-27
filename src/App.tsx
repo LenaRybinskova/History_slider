@@ -50,7 +50,9 @@ const App = () => {
     const [actualPeriod, setActualPeriod] = useState<number[]>([]);
     const dispatch = useAppDispatch();
     const categories = useAppSelector(state => state.categories.categories);
-    const events = useAppSelector(state => state.categories.eventsByIdCategories[activeCategoryId]);
+    const events = useAppSelector(state =>
+        state.categories.eventsByIdCategories[activeCategoryId] || []
+    );
 
     const prepareTimePeriod = (events: EventAPIType[]) => {
         if (!events || events.length === 0) {
@@ -107,6 +109,7 @@ const App = () => {
                 onPointClick={handlePointClick}
                 categories={categories}
                 activeCategoryId={activeCategoryId}
+                events={events}
             />
         </Container>
     );

@@ -6,6 +6,7 @@ const CardContainer = styled.div`
     flex-direction: column;
     gap: 30px;
     max-width: 320px;
+    max-height: 90px;
 `
 
 const Title = styled.h3`

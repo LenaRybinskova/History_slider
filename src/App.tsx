@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import GlobalStyle from '../src/app/styles/globalStyles';
 import styled from 'styled-components';
 import {colors} from '../src/app/styles/stylesVar';
-import {fetchAllCategoriesTC, fetchEventByCategoryIdTC} from './app/store/categoriesReducer';
+import {EventAPIType, fetchAllCategoriesTC, fetchEventByCategoryIdTC} from './app/store/categoriesReducer';
 import {useAppDispatch, useAppSelector} from '../src/app/store/store';
 import {TimelineSlider} from '../src/features/TimelineSlider/TimelineSlider';
 import {TimePeriod} from '../src/features/TimePeriod/TimePeriod';
@@ -45,25 +45,44 @@ export const Title = styled.h1`
 
 
 const App = () => {
-    const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>(1);
-    const [activeCategoryId, setActiveCategoryId] = useState<string>('');
-    const dispatch = useAppDispatch()
+    const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>(2);
+    const [activeCategoryId, setActiveCategoryId] = useState<string>('3333333');
+    const [actualPeriod, setActualPeriod] = useState<number[]>([]);
+    const dispatch = useAppDispatch();
     const categories = useAppSelector(state => state.categories.categories);
-    console.log('Категории в родит получили: ', categories)
+    const events = useAppSelector(state => state.categories.eventsByIdCategories[activeCategoryId]);
+
+    const prepareTimePeriod = (events: EventAPIType[]) => {
+        if (!events || events.length === 0) {
+            setActualPeriod([]);
+            return;
+        }
+
+        const years = events.map(event => Number(event.year));
+        const minYear = Math.min(...years);
+        const maxYear = Math.max(...years);
+        setActualPeriod([minYear, maxYear]);
+    };
 
     const handlePointClick = (index: number, categoryId: string) => {
-        console.log('Кликнули на точку:', index + 1, 'ID категории:', categoryId);
-        setActiveCategoryIndex(index)
-        setActiveCategoryId(categoryId)
+        setActiveCategoryIndex(index);
+        setActiveCategoryId(categoryId);
     };
 
     useEffect(() => {
-        dispatch(fetchAllCategoriesTC())
-    }, []);
+        dispatch(fetchAllCategoriesTC());
+    }, [dispatch]);
 
     useEffect(() => {
-        dispatch(fetchEventByCategoryIdTC(activeCategoryId))
-    }, [activeCategoryId]);
+        dispatch(fetchEventByCategoryIdTC(activeCategoryId));
+    }, [activeCategoryId, dispatch]);
+
+
+    useEffect(() => {
+        if (events && events.length > 0) {
+            prepareTimePeriod(events);
+        }
+    }, [events]);
 
     useEffect(() => {
         if (categories.length > 0 && !activeCategoryId) {
@@ -77,7 +96,7 @@ const App = () => {
         <Container>
             <GlobalStyle/>
             <Title>Исторические даты</Title>
-            <TimePeriod/>
+            <TimePeriod period={actualPeriod}/>
             <AnimatedCircle
                 categories={categories}
                 onPointClick={handlePointClick}
@@ -90,7 +109,7 @@ const App = () => {
                 activeCategoryId={activeCategoryId}
             />
         </Container>
-    )
+    );
 };
 
 export default App;

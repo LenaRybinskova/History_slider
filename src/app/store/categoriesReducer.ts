@@ -35,6 +35,16 @@ export const categoriesReducer = (state: InitialStateType = initialState, action
                 }
             };
         }
+        case FETCH_CATEGORY_BY_ID: {
+
+            return {
+                ...state,
+                eventsByIdCategories: {
+                    ...state.eventsByIdCategories,
+                    [action.payload.idCategory]: action.payload.events
+                }
+            };
+        }
         default:
             return state;
     }
@@ -45,14 +55,17 @@ export const categoriesReducer = (state: InitialStateType = initialState, action
 export const fetchAllCategoriesAC = (categories: CategoryType[]) => {
     return {
         type: FETCH_CATEGORIES,
-        payload:categories
+        payload: categories
     } as const
 }
 
-export const fetchEventByCategoryIdAC = (categoryId: EventAPIType) => {
+export const fetchEventByCategoryIdAC = (idCategory: string, events: EventAPIType[]) => {
     return {
         type: FETCH_CATEGORY_BY_ID,
-        payload:categoryId
+        payload: {
+            idCategory,
+            events
+        }
     } as const
 }
 
@@ -60,7 +73,7 @@ export const fetchEventByCategoryIdAC = (categoryId: EventAPIType) => {
 export type FetchCategories = ReturnType<typeof fetchAllCategoriesAC>
 export type FetchEventByCategoryId = ReturnType<typeof fetchEventByCategoryIdAC>
 
-type CategoriesActions =FetchEventByCategoryId | FetchCategories
+type CategoriesActions = FetchEventByCategoryId | FetchCategories
 
 //TC
 export const fetchAllCategoriesTC = () => async (dispatch: Dispatch<CategoriesActions>) => {
@@ -71,14 +84,11 @@ export const fetchAllCategoriesTC = () => async (dispatch: Dispatch<CategoriesAc
     }
 };
 
-export const fetchEventByCategoryIdTC = (idCategory:string) => async (dispatch: Dispatch<CategoriesActions>) => {
+export const fetchEventByCategoryIdTC = (idCategory: string) => async (dispatch: Dispatch<CategoriesActions>) => {
     try {
-        if (idCategory in EventsMockData.categories) {
-
-            const events = EventsMockData.categories[idCategory as keyof typeof EventsMockData.categories];
-            console.log("fetchEventByCategoryIdTC",events )
-            //dispatch(fetchEventByCategoryIdAC(events));
-        }
+        const events = EventsMockData.categories[idCategory as keyof typeof EventsMockData.categories];
+        console.log('fetchEventByCategoryIdTC', events)
+        dispatch(fetchEventByCategoryIdAC(idCategory, events));
     } catch (error) {
     }
 };

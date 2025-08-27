@@ -20,16 +20,19 @@ export const Date = styled.div<{ $secondary?: boolean }>`
     text-align: center;
     color: ${props => props.$secondary ? colors.secondary : colors.primary};
 `;
+type Props={
+    period:Number[]
+}
 
-
-export const TimePeriod = () => {
+export const TimePeriod = ({period}:Props) => {
+    console.log("TimePeriod",period )
     return (
         <TimePeriodContainer>
             <Date>
-                2015
+                {period[0]?.toString()}
             </Date>
             <Date $secondary>
-                2022
+                {period[1]?.toString()}
             </Date>
         </TimePeriodContainer>
     )

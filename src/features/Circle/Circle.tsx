@@ -114,7 +114,7 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({
     const [hoveredPointIndex, setHoveredPointIndex] = useState<number | null>(null)
     const [containerRotation, setContainerRotation] = useState(0)
 
-    console.log('categories2222', categories)
+/*    console.log('categories2222', categories)*/
     const validPointsCount = Math.max(2, Math.min(6, pointsCount))
 
     useEffect(() => {
@@ -127,7 +127,7 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({
     const getPointPosition = (index: number, total: number) => {
         const radius = 268
         const step = 360 / total
-        const angle = index * step - 310
+        const angle = index * step - 370
         const radian = (angle * Math.PI) / 180
 
         const x = radius + radius * Math.cos(radian)

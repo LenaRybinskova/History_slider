@@ -1,15 +1,14 @@
-import type React from "react"
-import { useEffect, useRef, useState } from "react"
-import styled from "styled-components"
-import { gsap } from "gsap"
-import { colors } from "../../app/styles/stylesVar"
+import type React from 'react'
+import {useEffect, useRef, useState} from 'react'
+import styled from 'styled-components'
+import {gsap} from 'gsap'
+import {colors} from '../../app/styles/stylesVar'
+
 
 interface CategoryType {
     id: string;
     description: string;
 }
-
-
 
 const CircleContainer = styled.div`
     position: absolute;
@@ -41,10 +40,10 @@ const PointsContainer = styled.div`
 
 const Point = styled.div<{ $isActive: boolean; $isHovered: boolean }>`
     position: absolute;
-    width: ${(props) => (props.$isActive || props.$isHovered ? "56px" : "6px")};
-    height: ${(props) => (props.$isActive || props.$isHovered ? "56px" : "6px")};
-    background-color: ${(props) => (props.$isActive ? colors.background : "#42567a")};
-    border: ${(props) => props.$isActive ? `2px solid ${colors.text}` : "none"};
+    width: ${(props) => (props.$isActive || props.$isHovered ? '56px' : '6px')};
+    height: ${(props) => (props.$isActive || props.$isHovered ? '56px' : '6px')};
+    background-color: ${(props) => (props.$isActive ? colors.background : '#42567a')};
+    border: ${(props) => props.$isActive ? `2px solid ${colors.text}` : 'none'};
     border-radius: 50%;
     cursor: pointer;
     transform: translate(-50%, -50%);
@@ -72,34 +71,50 @@ const PointNumber = styled.span<{ $visible: boolean; $rotation: number }>`
     position: absolute;
 `
 
+const PointTitle = styled.span<{ $visible: boolean; $rotation: number }>`
+    position: absolute;
+    top: 46px;
+    left: -44px;
+    transform: rotate(${props => props.$rotation}deg);
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: 400;
+    white-space: nowrap;
+    opacity: ${props => props.$visible ? 1 : 0};
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 20;
+
+    &::after {
+        right: 10px;
+        left: auto;
+    }
+`
+
 interface AnimatedCircleProps {
     categories: CategoryType[];
     onPointClick?: (index: number, categoryId: string) => void;
     onActiveCategoryChange?: (categoryId: string) => void;
     activePointIndex: number;
 }
-interface AnimatedCircleProps {
-    categories: CategoryType[];
-    onPointClick?: (index: number, categoryId: string) => void;
-    onActiveCategoryChange?: (categoryId: string) => void;
-    activePointIndex: number;
-}
-interface AnimatedCircleProps {
-    categories: CategoryType[];
-    onPointClick?: (index: number, categoryId: string) => void;
-    onActiveCategoryChange?: (categoryId: string) => void;
-    activePointIndex: number;
-}
-export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({categories, activePointIndex, onPointClick, onActiveCategoryChange}) => {
+
+export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({
+                                                                  categories,
+                                                                  activePointIndex,
+                                                                  onPointClick,
+                                                                  onActiveCategoryChange
+                                                              }) => {
     const pointsCount = categories.length;
     const containerRef = useRef<HTMLDivElement>(null)
     const pointsContainerRef = useRef<HTMLDivElement>(null)
     const pointsRef = useRef<HTMLDivElement[]>([])
     const numbersRef = useRef<HTMLSpanElement[]>([])
+    const titlesRef = useRef<HTMLSpanElement[]>([])
     const [internalActiveIndex, setInternalActiveIndex] = useState(activePointIndex)
     const [hoveredPointIndex, setHoveredPointIndex] = useState<number | null>(null)
     const [containerRotation, setContainerRotation] = useState(0)
 
+    console.log('categories2222', categories)
     const validPointsCount = Math.max(2, Math.min(6, pointsCount))
 
     useEffect(() => {
@@ -118,7 +133,7 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({categories, activ
         const x = radius + radius * Math.cos(radian)
         const y = radius + radius * Math.sin(radian)
 
-        return { x, y, angle }
+        return {x, y, angle}
     }
 
     const getShortestRotation = (currentIndex: number, targetIndex: number, total: number) => {
@@ -140,16 +155,16 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({categories, activ
     const animateToActivePosition = (targetIndex: number) => {
         if (targetIndex === internalActiveIndex || !pointsContainerRef.current) return
 
-        const currentRotation = gsap.getProperty(pointsContainerRef.current, "rotation") as number
+        const currentRotation = gsap.getProperty(pointsContainerRef.current, 'rotation') as number
         const shortestRotation = getShortestRotation(internalActiveIndex, targetIndex, validPointsCount)
         const targetRotation = currentRotation - shortestRotation
 
         gsap.to(pointsContainerRef.current, {
             rotation: targetRotation,
             duration: 1.2,
-            ease: "power2.inOut",
+            ease: 'power2.inOut',
             onUpdate: () => {
-                const currentRot = gsap.getProperty(pointsContainerRef.current, "rotation") as number
+                const currentRot = gsap.getProperty(pointsContainerRef.current, 'rotation') as number
                 numbersRef.current.forEach((numberEl) => {
                     if (numberEl) {
                         gsap.set(numberEl, {
@@ -157,7 +172,15 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({categories, activ
                             immediateRender: true,
                         })
                     }
-                })
+                });
+                titlesRef.current.forEach((titleEl) => {
+                    if (titleEl) {
+                        gsap.set(titleEl, {
+                            rotation: -currentRot,
+                            immediateRender: true,
+                        })
+                    }
+                });
             },
             onComplete: () => {
                 setContainerRotation(targetRotation)
@@ -176,7 +199,7 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({categories, activ
         pointsRef.current.forEach((point, index) => {
             if (!point) return
 
-            const { x, y } = getPointPosition(index, validPointsCount)
+            const {x, y} = getPointPosition(index, validPointsCount)
 
             gsap.set(point, {
                 left: x,
@@ -195,6 +218,15 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({categories, activ
             numbersRef.current.forEach((numberEl) => {
                 if (numberEl) {
                     gsap.set(numberEl, {
+                        rotation: -initialRotation,
+                        immediateRender: true,
+                    })
+                }
+            })
+
+            titlesRef.current.forEach((titleEl) => {
+                if (titleEl) {
+                    gsap.set(titleEl, {
                         rotation: -initialRotation,
                         immediateRender: true,
                     })
@@ -219,7 +251,7 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({categories, activ
 
     return (
         <CircleContainer ref={containerRef}>
-            <CircleRing />
+            <CircleRing/>
             <PointsContainer ref={pointsContainerRef}>
                 {categories.slice(0, validPointsCount).map((category, index) => (
                     <Point
@@ -242,10 +274,19 @@ export const AnimatedCircle: React.FC<AnimatedCircleProps> = ({categories, activ
                         >
                             {index + 1}
                         </PointNumber>
+
+                        <PointTitle
+                            ref={(el) => {
+                                if (el) titlesRef.current[index] = el
+                            }}
+                            $visible={index === activePointIndex}
+                            $rotation={-containerRotation}
+                        >
+                            {category.description}
+                        </PointTitle>
                     </Point>
                 ))}
             </PointsContainer>
         </CircleContainer>
     )
 }
-

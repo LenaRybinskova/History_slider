@@ -2,6 +2,7 @@ import {CategoryMockData, CategoryType, EventsMockData} from '../../mockData/moc
 import {Dispatch} from 'react';
 
 const FETCH_CATEGORIES = 'FETCH_CATEGORIES_SUCCESS'
+const FETCH_CATEGORY_BY_ID = 'FETCH_CATEGORY_BY_ID'
 
 export type EventAPIType = {
     id: string,
@@ -39,32 +40,44 @@ export const categoriesReducer = (state: InitialStateType = initialState, action
     }
 }
 
-export const fetchCategoriesAC = (categories: CategoryType[]) => {
+
+//AC
+export const fetchAllCategoriesAC = (categories: CategoryType[]) => {
     return {
         type: FETCH_CATEGORIES,
         payload:categories
     } as const
 }
 
-export type FetchCategories = ReturnType<typeof fetchCategoriesAC>
+export const fetchEventByCategoryIdAC = (categoryId: EventAPIType) => {
+    return {
+        type: FETCH_CATEGORY_BY_ID,
+        payload:categoryId
+    } as const
+}
 
-type CategoriesActions = | FetchCategories
 
+export type FetchCategories = ReturnType<typeof fetchAllCategoriesAC>
+export type FetchEventByCategoryId = ReturnType<typeof fetchEventByCategoryIdAC>
 
+type CategoriesActions =FetchEventByCategoryId | FetchCategories
+
+//TC
 export const fetchAllCategoriesTC = () => async (dispatch: Dispatch<CategoriesActions>) => {
     try {
         const categories = CategoryMockData;
-        dispatch(fetchCategoriesAC(categories));
+        dispatch(fetchAllCategoriesAC(categories));
     } catch (error) {
     }
 };
 
-export const fetchCategoryTC = (idCategory:string) => async (dispatch: Dispatch<CategoriesActions>) => {
+export const fetchEventByCategoryIdTC = (idCategory:string) => async (dispatch: Dispatch<CategoriesActions>) => {
     try {
         if (idCategory in EventsMockData.categories) {
 
             const events = EventsMockData.categories[idCategory as keyof typeof EventsMockData.categories];
-            dispatch(fetchCategoriesAC(events));
+            console.log("fetchEventByCategoryIdTC",events )
+            //dispatch(fetchEventByCategoryIdAC(events));
         }
     } catch (error) {
     }

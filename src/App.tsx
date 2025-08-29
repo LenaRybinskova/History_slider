@@ -17,7 +17,7 @@ export const Container = styled.div`
     margin-inline: 320px 160px;
     border: 1px solid ${colors.text};
     padding-block: 176px 105px;
-    padding-left: 80px;
+    padding-inline: 80px;
     background-color: rosybrown;
 
     position: relative;

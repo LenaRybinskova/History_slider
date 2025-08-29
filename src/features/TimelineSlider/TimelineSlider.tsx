@@ -1,75 +1,3 @@
-/*
-import styled from 'styled-components'
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import ArrowBackSVG from '../../../public/icons/ArrowBack'
-import ArrowForwardSVG from '../../../public/icons/ArrowForward'
-import {ButtonSlider} from '../../common/components/ButtonSlider/ButtonSlider';
-import {PartData} from '../../common/components/PartData/PartData';
-import {Card} from '../../common/components/Card/Card';
-
-
-
-const ContainerSlider = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 60px;
-`
-
-const Counter = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-`
-
-const Parts = styled.div`
-`
-
-const ButtonsContainer = styled.div`
-    display: flex;
-    gap: 20px`
-
-const TimelineContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 100px`
-
-
-export function TimelineSlider() {
-
-    const data = [1, 2, 3]
-
-    return (
-        <ContainerSlider>
-            <Counter>
-                <Parts>
-                    <PartData data={"01"}/>
-                    /<PartData data={"06"}/>
-                </Parts>
-                <ButtonsContainer>
-                    <ButtonSlider><ArrowBackSVG/></ButtonSlider>
-                    <ButtonSlider><ArrowForwardSVG/></ButtonSlider>
-                </ButtonsContainer>
-            </Counter>
-
-
-            <TimelineContainer>
-                <ButtonSlider><ArrowBackSVG/></ButtonSlider> {/!*надо чтобы эта кнопка исчезала, если в data нечего переключать слайдером*!/}
-                {data.map(d => (
-                    <Card title={'1997'} description={'kfndnvndfnlknlsklfvnf   skmdkfmpsdmp lsdmpfppdsk'}/>
-                ))}
-                <ButtonSlider><ArrowForwardSVG/></ButtonSlider>
-            </TimelineContainer>
-
-        </ContainerSlider>
-    )
-}
-*/
-
-
 import styled from 'styled-components'
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -80,7 +8,11 @@ import {ButtonSlider} from '../../common/components/ButtonSlider/ButtonSlider'
 import {PartData} from '../../common/components/PartData/PartData'
 import {Card} from '../../common/components/Card/Card'
 import {CategoryType} from '../../mockData/mockData';
-import {useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
+import {EventAPIType} from '../../app/store/categoriesReducer';
+import {Swiper, SwiperSlide} from 'swiper/react'
+import {Navigation} from 'swiper/modules'
+import {colors} from '../../../src/app/styles/stylesVar';
 
 const ContainerSlider = styled.div`
     display: flex;
@@ -94,6 +26,7 @@ const Counter = styled.div`
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
+    height: 88px;
 `
 
 const Parts = styled.div`
@@ -104,34 +37,69 @@ const ButtonsContainer = styled.div`
     gap: 20px;
 `
 
-const TimelineContainer = styled.div`
+const SliderWrapper = styled.div`
     display: flex;
     flex-direction: row;
     gap: 100px;
+    height: 100%;
+    width: 100%;
+    position: relative;
 `
+
+const SliderContainer = styled.div`
+    width: 100%;
+`
+
+const StyledSwiper = styled(Swiper)`
+    width: 100%;
+`
+
+const NavigationButton = styled(ButtonSlider)<{ position: 'left' | 'right' }>`
+    position: absolute;
+    top: 50%;
+    transform: translateY(-30%);
+    z-index: 10;
+    border:none;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    ${(props) => (props.position === 'left' ? 'left: -55px' : 'right: -55px')}
+    
+`
+
+const StyledSwiperSlide = styled(SwiperSlide)`
+    height: auto;
+`
+
 type Props = {
     activeCategoryIndex: number
     onPointClick?: (index: number, categoryId: string) => void;
     categories: CategoryType[]
     activeCategoryId: string
+    events: EventAPIType[]
 }
 
 export function TimelineSlider(props: Props) {
-    console.log("РЕРЕНДЕР TimelineSlider")
-    const { activeCategoryIndex, activeCategoryId, onPointClick, categories } = props;
-
+    console.log('РЕРЕНДЕР TimelineSlider')
+    const {activeCategoryIndex, activeCategoryId, onPointClick, categories, events} = props;
+    const [isBeginning, setIsBeginning] = useState(true)
+    const [isEnd, setIsEnd] = useState(false)
+    const navigationPrevRef = useRef<HTMLButtonElement>(null)
+    const navigationNextRef = useRef<HTMLButtonElement>(null)
+    const showSliderButtons = categories.length > 1;
     const onClickButtonSlider = (direction: number) => {
-        const newIndex = activeCategoryIndex + direction;
+        const newIndex = activeCategoryIndex + direction
 
         if (newIndex >= 0 && newIndex < categories.length) {
             if (onPointClick) {
-                onPointClick(newIndex, categories[newIndex].id);
+                onPointClick(newIndex, categories[newIndex].id)
             }
         }
     }
 
-    const data = [1, 2, 3];
-    const showSliderButtons = categories.length > 1;
+
+    useEffect(() => {
+        setIsBeginning(true)
+        setIsEnd(events.length <= 3)
+    }, [activeCategoryId, events.length])
 
     return (
         <ContainerSlider>
@@ -152,16 +120,69 @@ export function TimelineSlider(props: Props) {
                 )}
             </Counter>
 
-            <TimelineContainer>
-                {data.map((d, index) => (
+            {/* <TimelineContainer>
+                {events.map((event) => (
                     <Card
-                        key={index}
-                        title={'1997'}
-                        description={'kfndnvndfnlknlsklfvnf skmdkfmpsdmp lsdmpfppdsk'}
+                        key={event.id}
+                        title={event.year}
+                        description={event.description}
                     />
                 ))}
-            </TimelineContainer>
+            </TimelineContainer>*/}
+            <SliderWrapper>
+                <SliderContainer>
+                    <StyledSwiper
+                        modules={[Navigation]}
+                        spaceBetween={25}
+                        slidesPerView={3}
+                        slidesPerGroup={1}
+                        navigation={{
+                            prevEl: navigationPrevRef.current,
+                            nextEl: navigationNextRef.current,
+                        }}
+                        breakpoints={{
+                            320: {
+                                slidesPerView: 1,
+                                spaceBetween: 20,
+                            },
+                        }}
+                        onInit={(swiper) => {
+                            // @ts-ignore
+                            swiper.params.navigation.prevEl = navigationPrevRef.current
+                            // @ts-ignore
+                            swiper.params.navigation.nextEl = navigationNextRef.current
+                            swiper.navigation.init()
+                            swiper.navigation.update()
+                        }}
+                        onSlideChange={(swiper) => {
+                            setIsBeginning(swiper.isBeginning)
+                            setIsEnd(swiper.isEnd)
+                        }}
+                    >
+                        {events.map((event) => (
+                            <StyledSwiperSlide key={event.id}>
+                                <Card title={event.year} description={event.description}/>
+                            </StyledSwiperSlide>
+                        ))}
+                    </StyledSwiper>
+                </SliderContainer>
+
+
+                {!isBeginning && (
+                    <NavigationButton withBackground ref={navigationPrevRef} onClick={() => {
+                    }} position="left">
+                        <ArrowBackSVG/>
+                    </NavigationButton>
+                )}
+
+
+                {!isEnd && (
+                    <NavigationButton withBackground ref={navigationNextRef} onClick={() => {
+                    }} position="right">
+                        <ArrowForwardSVG/>
+                    </NavigationButton>
+                )}
+            </SliderWrapper>
         </ContainerSlider>
     )
 }
-

@@ -4,8 +4,9 @@ import {colors} from '../../../app/styles/stylesVar';
 const CardContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 30px;
-    max-width: 320px;
+    gap: 21px;
+    max-width: 400px;
+    height: 135px;
 `
 
 const Title = styled.h3`

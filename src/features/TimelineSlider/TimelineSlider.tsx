@@ -4,12 +4,12 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import ArrowBackSVG from '../../../public/icons/ArrowBack'
 import ArrowForwardSVG from '../../../public/icons/ArrowForward'
-import {ButtonSlider} from '../../common/components/ButtonSlider/ButtonSlider'
-import {PartData} from '../../common/components/PartData/PartData'
-import {Card} from '../../common/components/Card/Card'
-import {CategoryType} from '../../mockData/mockData';
+import {ButtonSlider} from 'common/components/ButtonSlider/ButtonSlider'
+import {PartData} from 'common/components/PartData/PartData'
+import {Card} from 'common/components/Card/Card'
+import {CategoryType} from 'mockData/mockData';
 import {useEffect, useRef, useState} from 'react';
-import {EventAPIType} from '../../app/store/categoriesReducer';
+import {EventAPIType} from 'app/store/categoriesReducer';
 import {Swiper, SwiperSlide} from 'swiper/react'
 import {FreeMode, Navigation} from 'swiper/modules'
 import { Swiper as SwiperClass } from 'swiper';

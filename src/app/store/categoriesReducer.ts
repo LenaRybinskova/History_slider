@@ -1,4 +1,4 @@
-import {CategoryMockData, CategoryType, EventsMockData} from '../../mockData/mockData';
+import {CategoryMockData, CategoryType, EventsMockData} from 'mockData/mockData';
 import {Dispatch} from 'react';
 
 const FETCH_CATEGORIES = 'FETCH_CATEGORIES_SUCCESS'

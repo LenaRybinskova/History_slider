@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import {colors} from '../../app/styles/stylesVar';
+import {colors} from 'styles/stylesVar';
 import {gsap} from 'gsap';
 import {useEffect, useRef, useState} from 'react';
 

@@ -1,12 +1,12 @@
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import GlobalStyle from '../src/app/styles/globalStyles';
 import styled from 'styled-components';
-import {colors} from '../src/app/styles/stylesVar';
-import {EventAPIType, fetchAllCategoriesTC, fetchEventByCategoryIdTC} from './app/store/categoriesReducer';
-import {useAppDispatch, useAppSelector} from '../src/app/store/store';
-import {TimelineSlider} from '../src/features/TimelineSlider/TimelineSlider';
-import {TimePeriod} from '../src/features/TimePeriod/TimePeriod';
-import {AnimatedCircle} from '../src/features/Circle/Circle';
+import {colors} from 'styles/stylesVar';
+import {EventAPIType, fetchAllCategoriesTC, fetchEventByCategoryIdTC} from 'app/store/categoriesReducer';
+import {useAppDispatch, useAppSelector} from 'app/store/store';
+import {TimelineSlider} from 'features/TimelineSlider/TimelineSlider';
+import {TimePeriod} from 'features/TimePeriod/TimePeriod';
+import {AnimatedCircle} from 'features/Circle/Circle';
 
 
 export const Container = styled.div`

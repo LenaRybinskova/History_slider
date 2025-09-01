@@ -1,4 +1,5 @@
 import { Ref, SVGProps, forwardRef, memo } from 'react';
+import  React from 'react'
 
 const ArrowForwardSVG = (props: SVGProps<SVGSVGElement>, ref: Ref<SVGSVGElement>) => (
     <svg width="10" height="14" viewBox="0 0 10 14" fill="none" xmlns="http://www.w3.org/2000/svg">

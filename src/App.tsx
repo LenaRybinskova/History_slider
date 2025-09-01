@@ -15,10 +15,10 @@ export const Container = styled.div`
     justify-content: space-between;
     height: 100vh;
     margin-inline: 320px 160px;
-    border: 1px solid ${colors.text};
+    border-inline: 1px solid ${colors.textWithPoacity};
     padding-block: 176px 105px;
     padding-inline: 80px;
-    background-color: rosybrown;
+    background-color: ${colors.background};
     position: relative;
 
     &::before {
@@ -64,7 +64,7 @@ export const Title = styled.h1`
         transform: translateY(-50%);
         width: 5px;
         height: 120px;
-        background: linear-gradient(to bottom, #5d5fef, #ef5da8);
+        background: linear-gradient(to bottom, ${colors.primary}, ${colors.secondary});
     }
 `;
 
@@ -83,7 +83,6 @@ const App = () => {
         state.categories.eventsByIdCategories[activeCategoryId] || []
     );
 
-    // Мемоизируем обработчики
     const handlePointClick = useCallback((index: number, categoryId: string) => {
         setActiveCategoryIndex(index);
         setActiveCategoryId(categoryId);

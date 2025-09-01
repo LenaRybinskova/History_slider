@@ -25,10 +25,10 @@ const CircleRing = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    border: 1px solid ${colors.primary};
+    border: 1px solid ${colors.text};
     border-radius: 50%;
     background: transparent;
-
+    opacity: 0.2;
 `
 
 const PointsContainer = styled.div`

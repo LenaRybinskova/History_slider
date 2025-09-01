@@ -4,6 +4,7 @@ export const colors = {
     lightBlue: "#3877ee",
     background: "#fff",
     text: "#42567a",
+    textWithPoacity:"rgba(66, 86, 122, 0.1)",
 } as const
 
 export const fonts = {

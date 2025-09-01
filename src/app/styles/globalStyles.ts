@@ -33,13 +33,7 @@ const GlobalStyle = createGlobalStyle`
     
 
     body {
- /*       max-width: 1920px;
-        height: 1080px;*/
-/*        margin: 0 auto;*/
-        /*      width: 100%;*/
-        background-color:olivedrab;
-        //margin-inline:160px 320px;
-/*        margin: 177px 160px 105px  320px;*/
+        background-color:${colors.background};
         border-inline: 1px solid ${colors.text};
     }
 
